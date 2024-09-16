@@ -8,6 +8,7 @@ module Decidim
       class ChallengesForm < Decidim::Form
         include TranslatableAttributes
         include Decidim::Sdgs::SdgsHelper
+        include Decidim::HasUploadValidations
 
         mimic :challenge
 
@@ -27,12 +28,19 @@ module Decidim
         attribute :coordinating_entities, String
         attribute :collaborating_entities, String
 
+        attribute :card_image
+        attribute :remove_card_image, Boolean, default: false
+
         validates :title, :local_description, :global_description, translatable_presence: true
         validates :scope, presence: true, if: ->(form) { form.decidim_scope_id.present? }
         validate :valid_state
 
         validates :start_date, presence: true, date: { before_or_equal_to: :end_date }
         validates :end_date, presence: true, date: { after_or_equal_to: :start_date }
+
+        validates :card_image,
+                  presence: false,
+                  passthru: { to: Decidim::Attachment }
 
         alias organization current_organization
 

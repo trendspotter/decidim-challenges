@@ -18,7 +18,11 @@ module Decidim
 
       helper_method :solutions
 
-      def index; end
+      def index
+        @solutions = search.result
+        @solutions = reorder(solutions)
+        @solutions = paginate(solutions)
+      end
 
       def show
         @solution = solution
@@ -34,18 +38,12 @@ module Decidim
 
       def default_filter_params
         {
-          search_text: "",
-          category_id: default_filter_category_params,
-          territorial_scope_id: default_filter_scope_params,
-          related_to: "",
-          sdgs_codes: [],
+          search_text_cont: "",
+          with_any_category: default_filter_category_params,
+          with_any_territorial_scope_id: default_filter_scope_params,
+          with_related_to: "",
+          with_any_sdgs_codes: [],
         }
-      end
-
-      def default_filter_category_params
-        return "all" unless current_component.participatory_space.categories.any?
-
-        ["all"] + current_component.participatory_space.categories.map { |category| category.id.to_s }
       end
 
       def default_filter_scope_params
@@ -59,7 +57,7 @@ module Decidim
       end
 
       def solutions
-        @solutions ||= paginate(search.results.published)
+        @solutions ||= paginate(search.result)
       end
 
       def solution
@@ -87,8 +85,8 @@ module Decidim
         @technological_scope ||= current_organization.scopes.find_by(id: @solution.problem.decidim_technological_scope_id)
       end
 
-      def search_klass
-        Decidim::Solutions::SolutionSearch
+      def search_collection
+        ::Decidim::Solutions::Solution.where(component: current_component).published
       end
     end
   end

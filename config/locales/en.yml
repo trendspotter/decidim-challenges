@@ -13,13 +13,13 @@ en:
         start_date: Start date
         status: State
         survey_enabled: Enabled survey
-        tags: Tags
+        tags: Keywords
         title: Title
       problem:
         causes: Causes
         challenge: Challenge
+        collaborating_entities: Collaborating entity
         groups_affected: Groups affected
-        col_entity: Collaborating entity
         decidim_sectorial_scope_id: Sectorial scope
         decidim_technological_scope_id: Technological scope
         description: Description
@@ -44,7 +44,7 @@ en:
         requirements: Requeriments
         sdg: Sustainable Development Goals
         scope: Territory
-        tags: Tags
+        tags: Keywords
         title: Title
   decidim:
     challenges:
@@ -77,6 +77,7 @@ en:
             update: Update
           form:
             duration: Duration
+            images: Images
             select_states: Select state
           new:
             create: New
@@ -175,6 +176,10 @@ en:
         name: Challenges
         settings:
           global:
+            allow_card_image: Allow card image
+            announcement: Announcement
+            hide_filters: Hide filters
+          step:
             announcement: Announcement
             hide_filters: Hide filters
       problems:

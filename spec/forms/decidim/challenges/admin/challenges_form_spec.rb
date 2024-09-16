@@ -6,9 +6,10 @@ module Decidim
   module Challenges
     module Admin
       describe ChallengesForm do
-        subject { described_class.from_params(attributes).with_context(current_organization: organization) }
+        subject { described_class.from_params(attributes).with_context(current_organization: organization, current_component: component) }
 
-        let(:organization) { create :organization }
+        let(:component) { create :challenges_component }
+        let(:organization) { component.organization }
         let(:scope) { create :scope, organization: organization }
         let(:title) do
           {
@@ -38,6 +39,7 @@ module Decidim
         let(:end_date) { 2.days.from_now + 4.hours }
         let(:collaborating_entities) { "collaborating_entities" }
         let(:coordinating_entities) { "coordinating_entities" }
+        let(:card_image) { Decidim::Dev.test_file("city.jpeg", "image/jpeg") }
         let(:attributes) do
           {
             "title" => title,
@@ -51,6 +53,7 @@ module Decidim
             "collaborating_entities" => collaborating_entities,
             "coordinating_entities" => coordinating_entities,
             "scope" => scope,
+            "card_image" => card_image,
           }
         end
 

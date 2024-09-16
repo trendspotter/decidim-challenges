@@ -10,9 +10,9 @@ Decidim.register_component(:challenges) do |component|
   component.engine = Decidim::Challenges::Engine
   component.stylesheet = "decidim/challenges/challenges"
   component.admin_engine = Decidim::Challenges::AdminEngine
-  component.icon = "decidim/challenges/icon.svg"
+  component.icon = "media/images/decidim_challenges_icon.svg"
 
-  component.data_portable_entities = ["Decidim::Challenge::Survey"]
+  component.data_portable_entities = ["Decidim::Challenges::Survey"]
 
   # component.on(:before_destroy) do |instance|
   #   # Code executed before removing the component
@@ -29,6 +29,7 @@ Decidim.register_component(:challenges) do |component|
     # Available types: :integer, :boolean
     settings.attribute :announcement, type: :text, translated: true, editor: true
     settings.attribute :hide_filters, type: :boolean, default: false
+    settings.attribute :allow_card_image, type: :boolean, default: false
   end
 
   component.settings(:step) do |settings|
@@ -52,9 +53,9 @@ Decidim.register_component(:challenges) do |component|
   end
 
   component.exports :answers do |exports|
-    exports.collection do |f|
-      survey = Decidim::Challenges::Challenge.find_by(component: f)
-      Decidim::Forms::QuestionnaireUserAnswers.for(survey.questionnaire)
+    exports.collection do |_f, _user, resource_id|
+      questionnaire = Decidim::Forms::Questionnaire.find(resource_id)
+      Decidim::Forms::QuestionnaireUserAnswers.for(questionnaire)
     end
 
     exports.formats %w(CSV JSON Excel FormPDF)

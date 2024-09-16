@@ -1,5 +1,5 @@
-<%= stylesheet_link_tag "decidim/sdgs/ods" %>
-<%= stylesheet_link_tag "decidim/challenges/challenges" %>
+<%= stylesheet_pack_tag "decidim_sdgs" %>
+<%= stylesheet_pack_tag "decidim_challenges" %>
 
 <div class="row column">
   <div class="row">
@@ -54,8 +54,7 @@
                     <p><%= t(@sdg + ".logo.line1", scope: "decidim.components.sdgs") %></p>
                     <p><%= t(@sdg + ".logo.line2", scope: "decidim.components.sdgs") %></p>
                 </div>
-                <img alt="Logo ODS <%= @sdg_index %>"
-                  src="/assets/decidim/sdgs/ods-<%= @sdg_index %>.svg" class="challenge--view">
+                <%= image_pack_tag "media/images/ods-#{@sdg_index}.svg", alt: "Logo ODS #{@sdg_index}", class: "challenge--view" %>
             </div>
           </div>
         <% end %>
@@ -78,8 +77,10 @@
         <h3><strong><%= t("global_description", scope: "activemodel.attributes.challenge") %></strong></h3>
         <p><%= present(@challenge).global_description %></p>
 
+        <% if present(@challenge).tags.present? %>
         <h3><strong><%= t("tags", scope: "activemodel.attributes.challenge") %></strong></h3>
         <p class="tags"><%= present(@challenge).tags %></p>
+        <% end %>
 
         <% if @challenge.problems.present? %>
           <h3><strong><%= t("associated_problems", scope: "decidim.challenges.show") %></strong></h3>
@@ -92,13 +93,14 @@
                       <%= translated_attribute problem.title %>
                     </div>
                   <% end %>
-                  <%= raw translated_attribute problem.description %>
+                  <%= truncate_description(problem.description) %>
                 </div>
               </div>
             <% end %>
           </div>
         <% end %>
 
+        <% if challenge_associated_solutions(@challenge).present? %>
         <h3><strong><%= t("proposed_solutions", scope: "decidim.challenges.show") %></strong></h3>
         <div class="row small-up-1 medium-up-2 card-grid">
           <% challenge_associated_solutions(@challenge).each do |solution| %>
@@ -109,11 +111,12 @@
                     <%= translated_attribute solution.title %>
                   </div>
                 <% end %>
-                <%= raw translated_attribute solution.description %>
+                <%= truncate_description(solution.description) %>
               </div>
             </div>
           <% end %>
         </div>
+        <% end %>
       </div>
     </div>
   </div>

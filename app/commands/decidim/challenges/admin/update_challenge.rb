@@ -4,7 +4,9 @@ module Decidim
   module Challenges
     module Admin
       # A command with all the business logic when a user updates a challenge.
-      class UpdateChallenge < Rectify::Command
+      class UpdateChallenge < Decidim::Command
+        include ::Decidim::AttachmentAttributesMethods
+
         # Public: Initializes the command.
         #
         # form         - A form object with the params.
@@ -60,7 +62,9 @@ module Decidim
             end_date: form.end_date,
             coordinating_entities: form.coordinating_entities,
             collaborating_entities: form.collaborating_entities,
-          }
+          }.merge(
+            attachment_attributes(:card_image)
+          )
         end
       end
     end
